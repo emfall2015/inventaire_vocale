@@ -10,6 +10,8 @@ button.addEventListener('click', () => {
         vocaliser("Aucune analyse disponible.");
     }
 });
+
+
 function renderResult(occurrences, phrase, definitions) {
     resultsContent.innerHTML = ""; // Nettoie la zone
 
@@ -49,3 +51,5 @@ function vocaliser(texte) {
         window.speechSynthesis.speak(utterance);
     }
 }
+
+
