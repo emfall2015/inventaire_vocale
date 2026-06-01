@@ -103,6 +103,7 @@ function renderResult(occurrences, phrase, definitions) {
         resultsContent.appendChild(div);
     });
 
+    
     // 2. Affichage du texte descriptif et des définitions
     const divDetail = document.createElement("div");
     divDetail.className = "result-detail";
