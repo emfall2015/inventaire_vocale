@@ -21,7 +21,7 @@ function chargerImage(event) {
     reader.readAsDataURL(selectedFile);
 }
 // Chargement du fichier semantic.json
-async function loadSemantic() {
+async function chargerEnrichissement() {
     const res = await fetch("semantic.json");
     return await res.json();
 }
@@ -43,31 +43,32 @@ function getOccurrences(predictions) {
     return occurrences; // Occurrences: {person: 2, laptop: 1, potted plant: 1}
 }
 // Construire phrase
-function buildPhrase(occurrences, semantic) {
+function genererPhrase(occurrences, semantic) {
     const parts = [];
-    // Déclaration d'un objet numbers pour gérer les traductions
-    const numbers = {
+    // Déclaration d'un objet traduction pour gérer les traductions
+    const traduction = {
         1: "un",
         2: "deux",
-        3: "trois"
+        3: "trois",
+        4: "quatre"
     };
 
     Object.entries(occurrences).forEach(([classe, nb]) => { //Object.entries() retourne un tableau
     //  contenant les paires clé-valeur des propriétés énumérables d'un objet
         const name = semantic[classe]?.fr || classe;
-        const nbr = numbers[nb] || nb;
+        const nbr = traduction[nb] || nb;
 
         parts.push(`${nbr} ${name}${nb > 1 ? "s" : ""}`);
     });
 // Construction de la phrase
-// join transforme le tbleau en texte 
-// remplace lar derniere virgule par un "et" et ajoute un "." à la fin
+// join transforme le tableau en texte 
+// remplace la derniere virgule par un "et" et ajoute un "." à la fin
     return "J'ai détecté " +
         parts.join(", ").replace(/, ([^,]*)$/, " et $1") +
         ".";
 }
 // Ajouter les définitions 
-function buildDefinitions(occurrences, semantic) {
+function genererDefinitions(occurrences, semantic) {
     let definitions = "";
 
     Object.entries(occurrences).forEach(([classe]) => {
@@ -77,14 +78,16 @@ function buildDefinitions(occurrences, semantic) {
     return definitions;
 }
 // Affichage resultat
-function renderResult(occurrences,phrase, definitions) {
+function affichage(occurrences,phrase, definitions, semantic) {
   
     Object.entries(occurrences).forEach(([classe, nb]) => {
     const div = document.createElement("div");
     div.className = "result-item";
-    div.textContent = nb + "  " + classe;
+    div.textContent = nb + "  " +(semantic[classe]?.fr || classe) + (nb>1? "s" :"");
+   
     resultsContent.appendChild(div);
     });
+
     const div = document.createElement("div");
     div.className = "result-item";
     div.innerHTML = phrase + "<br><br>" + definitions;
@@ -92,8 +95,9 @@ function renderResult(occurrences,phrase, definitions) {
    resultsContent.appendChild(div);
 }
 
-// Function analyser Image
-async function analyzeImage() {
+// Function detecterObjets fonction qui analyse une Image et 
+//detecter les objets
+async function detecterObjets() {
     if (!selectedFile) {
         alert("Veuillez sélectionner une image");
         return;
@@ -104,21 +108,21 @@ async function analyzeImage() {
     const img = new Image();
     img.src = URL.createObjectURL(selectedFile);
 
-    const semantic = await loadSemantic();
+    const semantic = await chargerEnrichissement();
     const model = await chargerModele();
 
     const predictions = await model.detect(img);
 
     const occurrences = getOccurrences(predictions);
 
-    const phrase = buildPhrase(occurrences, semantic);
-    const definitions = buildDefinitions(occurrences, semantic);
+    const phrase = genererPhrase(occurrences, semantic);
+    const definitions = genererDefinitions(occurrences, semantic);
 
-    renderResult(occurrences,phrase, definitions);
+    affichage(occurrences,phrase, definitions,semantic);
 
     console.log("Occurrences:", occurrences);
     console.log(phrase);
 }
 
 imageInput.addEventListener('change', chargerImage);
-analyzeBtn.addEventListener('click', analyzeImage);
+analyzeBtn.addEventListener('click', detecterObjets);
