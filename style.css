@@ -5,8 +5,6 @@
     box-sizing: border-box;
 }
 #voice{
-
-    
     padding: 16px;
     /* border: none; */
     border-radius: 15px;
@@ -43,19 +41,8 @@ body {
         0 15px 35px rgba(0,0,0,0.3),
         0 0 30px rgba(59,130,246,0.15);
 }
-#voice{
-    display:none;
-    padding: 16px;
-    /* border: none; */
-    border-radius: 15px;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    color: white;
-    font-size: 1.1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.3s ease;
-    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
-}
+
+
 /* TITRE */
 h1 {
     text-align: center;
