@@ -1,6 +1,6 @@
 
 const button = document.getElementById('voice');
-
+ document.getElementById('voice').style.display="none";
 let dernierePhrase = ""; // Permet de stocker la phrase pour le bouton écouter
 
 button.addEventListener('click', () => {
@@ -11,20 +11,17 @@ button.addEventListener('click', () => {
     }
 });
 
-
 function renderResult(occurrences, phrase, definitions) {
     resultsContent.innerHTML = ""; // Nettoie la zone
-
     dernierePhrase = phrase;
-
     // 1. Affichage des badges d'occurrences bruts
     Object.entries(occurrences).forEach(([classe, nb]) => {
+         document.getElementById('voice').style.display="block";
         const div = document.createElement("div");
         div.className = "result-item";
         div.innerHTML = `➔ <strong>${nb}</strong> x ${classe}`;
         resultsContent.appendChild(div);
     });
-
 
     const divDetail = document.createElement("div");
     divDetail.className = "result-detail";
@@ -39,9 +36,7 @@ button.addEventListener('click', () => {
         vocaliser("Aucune analyse disponible.");
     }
 });
-
 }
-
 function vocaliser(texte) {
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel(); // Stoppe la voix en cours si nécessaire
