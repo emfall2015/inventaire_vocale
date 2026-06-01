@@ -2,8 +2,10 @@ const imageInput = document.getElementById('imageInput');
 const previewImage = document.getElementById('previewImage');
 const analyzeBtn = document.getElementById('analyzeBtn');
 const resultsContent = document.getElementById('resultsContent');
+const button = document.getElementById('voice');
 
 let selectedFile = null;
+let inventaire = [];
 
 // Prévisualisation de l'image
 function chargerImage(event) {
@@ -54,15 +56,15 @@ function genererPhrase(occurrences, semantic) {
     };
 
     Object.entries(occurrences).forEach(([classe, nb]) => { //Object.entries() retourne un tableau
-    //  contenant les paires clé-valeur des propriétés énumérables d'un objet
+        //  contenant les paires clé-valeur des propriétés énumérables d'un objet
         const name = semantic[classe]?.fr || classe;
         const nbr = traduction[nb] || nb;
 
         parts.push(`${nbr} ${name}${nb > 1 ? "s" : ""}`);
     });
-// Construction de la phrase
-// join transforme le tableau en texte 
-// remplace la derniere virgule par un "et" et ajoute un "." à la fin
+    // Construction de la phrase
+    // join transforme le tableau en texte 
+    // remplace la derniere virgule par un "et" et ajoute un "." à la fin
     return "J'ai détecté " +
         parts.join(", ").replace(/, ([^,]*)$/, " et $1") +
         ".";
@@ -78,21 +80,51 @@ function genererDefinitions(occurrences, semantic) {
     return definitions;
 }
 // Affichage resultat
-function affichage(occurrences,phrase, definitions, semantic) {
-  
+function affichage(occurrences, phrase, definitions, semantic) {
+
     Object.entries(occurrences).forEach(([classe, nb]) => {
-    const div = document.createElement("div");
-    div.className = "result-item";
-    div.textContent = nb + "  " +(semantic[classe]?.fr || classe) + (nb>1? "s" :"");
-   
-    resultsContent.appendChild(div);
+        console.log(occurrences);
+        const div = document.createElement("div");
+        div.className = "result-item";
+        div.textContent = nb + "  " + (semantic[classe]?.fr || classe) + (nb > 1 ? "s" : "");
+        inventaire.push((semantic[classe]?.fr || classe) + (nb > 1 ? "s" : ""), nb);
+        resultsContent.appendChild(div);
     });
+
 
     const div = document.createElement("div");
     div.className = "result-item";
     div.innerHTML = phrase + "<br><br>" + definitions;
 
-   resultsContent.appendChild(div);
+    resultsContent.appendChild(div);
+
+    //Lecture de la synthése vocal 
+    button.addEventListener('click', () => {
+        if (definitions) {
+            vocaliser(phrase + definitions);
+        } else {
+            vocaliser("Aucune analyse disponible.");
+        }
+    });
+
+    /*  historique(
+       {
+   "date": dateDuJour(),
+   "image": "bureau.jpg",
+   "inventaire": {
+   "bottle": 1,
+   "laptop": 1,
+   "cup": 1
+   }
+   }
+   );*/
+    historique(
+        {
+            "date": dateDuJour(),
+            "image": "bureau.jpg",
+            "inventaire": inventaire
+        }
+    );
 }
 
 // Function detecterObjets fonction qui analyse une Image et 
@@ -112,17 +144,87 @@ async function detecterObjets() {
     const model = await chargerModele();
 
     const predictions = await model.detect(img);
+    //console.log(predictions);
 
     const occurrences = getOccurrences(predictions);
 
     const phrase = genererPhrase(occurrences, semantic);
     const definitions = genererDefinitions(occurrences, semantic);
 
-    affichage(occurrences,phrase, definitions,semantic);
+    affichage(occurrences, phrase, definitions, semantic);
 
     console.log("Occurrences:", occurrences);
     console.log(phrase);
+
+
 }
 
 imageInput.addEventListener('change', chargerImage);
 analyzeBtn.addEventListener('click', detecterObjets);
+
+function historique(data, fileName = "historique.json") {
+    try {
+
+        // Conversion en JSON formaté
+        const jsonString = JSON.stringify(data, null, 2);
+
+        // Création d'un Blob et d'un lien de téléchargement
+        const blob = new Blob([jsonString], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        // Libération de l'URL
+        URL.revokeObjectURL(url);
+
+        console.log(`Fichier ${fileName} généré avec succès.`);
+    } catch (error) {
+        console.error("Erreur lors de la génération du fichier JSON :", error.message);
+    }
+}
+
+/*
+ historique(
+    { nom: "Alice", age: 25, hobbies: ["lecture", "voyage"] },
+    "historique.json"
+);*/
+
+// Formatage date YYYY-MM-DD HH:MM
+function padZero(num) {
+    return num < 10 ? "0" + num : num;
+}
+function dateDuJour() {
+    const maintenant = new Date();
+
+    const annee = maintenant.getFullYear();
+    const mois = padZero(maintenant.getMonth() + 1); // Mois commence à 0
+    const jour = padZero(maintenant.getDate());
+
+    const heures = padZero(maintenant.getHours());
+    const minutes = padZero(maintenant.getMinutes());
+
+    // Format final : YYYY-MM-DD HH:MM
+    const dateHeure = `${annee}-${mois}-${jour} ${heures}:${minutes}`;
+    return dateHeure;
+}
+
+function vocaliser(voice) {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); // Stoppe la voix en cours si nécessaire
+
+         const voiceNettoye = voice
+        .replace(/<br\s*\/?>/gi, "\n")  // supprime les <br>, <br/> et <br />
+        .replace(/<[^>]*>/g, "")      // supprime toute autre balise HTML
+        .replace(/\./g, "");           // suppression des points
+
+        const utterance = new SpeechSynthesisUtterance(voiceNettoye);
+        utterance.lang = "fr-FR";
+        utterance.rate = 1.0;
+        window.speechSynthesis.speak(utterance);
+    }
+}
