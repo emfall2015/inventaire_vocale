@@ -14,7 +14,7 @@ button.addEventListener('click', () => {
 function renderResult(occurrences, phrase, definitions) {
     resultsContent.innerHTML = ""; // Nettoie la zone
     dernierePhrase = phrase;
-             document.getElementById('voice').style.display="block";
+             document.getElementById('voice').style.display="block !important";
 
     // 1. Affichage des badges d'occurrences bruts
     Object.entries(occurrences).forEach(([classe, nb]) => {
