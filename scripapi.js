@@ -1,4 +1,4 @@
-
+/*
 const button = document.getElementById('voice');
 
 let dernierePhrase = ""; // Permet de stocker la phrase pour le bouton écouter
@@ -10,8 +10,8 @@ button.addEventListener('click', () => {
         vocaliser("Aucune analyse disponible.");
     }
 });
-
-
+*/
+/*
 function renderResult(occurrences, phrase, definitions) {
     resultsContent.innerHTML = ""; // Nettoie la zone
 
@@ -40,8 +40,8 @@ button.addEventListener('click', () => {
     }
 });
 
-}
-
+}*/
+/*
 function vocaliser(texte) {
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel(); // Stoppe la voix en cours si nécessaire
@@ -52,4 +52,4 @@ function vocaliser(texte) {
     }
 }
 
-
+*/
