@@ -1,0 +1,52 @@
+{
+  "laptop": {
+    "fr": "ordinateur portable",
+    "definition": "Un ordinateur portable est un appareil informatique  utilisé pour travailler ou naviguer sur Internet.",
+    "category": "electronique",
+    "voice": "Un ordinateur portable a été détecté."
+  },
+  "bottle": {
+    "fr": "bouteille",
+    "definition": "Une bouteille est un Contenant utilisé pour stocker des liquides.",
+    "category": "objets du quotidien",
+    "voice": "Une bouteille a été détectée."
+  },
+  "phone": {
+    "fr": "téléphone",
+    "definition": "Un téléphone est un Appareil permettant de communiquer à distance.",
+    "category": "electronique",
+    "voice": "Un téléphone a été détecté."
+  },
+  "chair": {
+    "fr": "chaise",
+    "definition": "Une chaise  est un Meuble pour s'asseoir.",
+    "category": "meuble",
+    "voice": "Une chaise a été détectée."
+  },
+   "person": {
+    "fr": "personne",
+    "definition": "Une personne est un etre humain: femme,homme ou enfant",
+    "category": "etre vivant",
+    "voice": "Une personne a été détectée."
+  },
+  
+  "potted plant": {
+    "fr": "plante en pot",
+    "definition": "Une plante en pot est une plante cultivée dans un pot, utilisée pour la décoration ou le jardinage.",
+    "category": "végétal",
+    "voice": "Une plante en pot a été détectée."
+  },
+  "dining table": {
+    "fr": "table à manger",
+    "definition": "Une table à manger est une table utilisée pour prendre les repas, généralement placée dans une salle à manger ou une cuisine.",
+    "category": "meuble",
+    "voice": "Une table à manger a été détectée."
+  },
+  "book": {
+    "fr": "livre",
+    "definition": "Un livre est un ensemble de pages reliées contenant du texte ou des images, utilisé pour lire ou apprendre.",
+    "category": "objet culturel",
+    "voice": "Un livre a été détecté."
+  }
+
+}

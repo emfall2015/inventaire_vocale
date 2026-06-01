@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> Inventaire Vocal pour Personnes Malvoyantes </title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Load TensorFlow.js from a script tag -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <!-- Load the coco-ssd model. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Inventaire Vocal pour Personnes Malvoyantes</h1>
+
+        <div class="upload-box">
+            <p>Sélectionnez une image à analyser</p>
+
+            <input type="file" id="imageInput" accept="image/*">
+
+            <button class="btn" id="analyzeBtn">
+                Analyser
+            </button>
+        </div>
+
+        <!-- Affichage image -->
+        <div class="preview">
+            <img id="previewImage" src="" alt="Prévisualisation">
+        </div>
+
+        <!-- Résultats -->
+        <div class="results">
+
+            <h2>Résultats de l'analyse</h2>
+
+            <div id="resultsContent">
+                <p class="empty">Aucune analyse pour le moment</p>
+            </div>
+
+        </div>
+
+
+       
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
