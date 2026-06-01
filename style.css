@@ -43,7 +43,7 @@ body {
     font-weight: 700;
     cursor: pointer;
     transition: 0.3s ease;
-    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);}
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
 }
 /* TITRE */
 h1 {
