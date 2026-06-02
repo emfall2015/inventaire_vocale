@@ -4,9 +4,10 @@
     padding: 0;
     box-sizing: border-box;
 }
-#voice{
+
+#voice, #historique{
     padding: 16px;
-    /* border: none; */
+    
     border-radius: 15px;
     background: linear-gradient(135deg, #3b82f6, #2563eb);
     color: white;
@@ -198,4 +199,12 @@ input[type="file"] {
         padding: 14px;
         font-size: 1rem;
     }
+}
+#historique {
+    margin-left: auto;
+}
+.actions {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
 }
