@@ -143,7 +143,7 @@ async function detecterObjets() {
     const model = await chargerModele();
 
     const predictions = await model.detect(img);
-    //console.log(predictions);
+    console.log("Predictions "+predictions);
 
     const occurrences = getOccurrences(predictions);
 
@@ -151,6 +151,7 @@ async function detecterObjets() {
     const definitions = genererDefinitions(occurrences, semantic);
 
     affichage(occurrences, phrase, definitions, semantic);
+    
 
     //console.log("Occurrences:", occurrences);
     //console.log(phrase);
@@ -221,3 +222,4 @@ function vocaliser(voice) {
         window.speechSynthesis.speak(utterance);
     }
 }
+
