@@ -3,8 +3,9 @@ const previewImage = document.getElementById('previewImage');
 const analyzeBtn = document.getElementById('analyzeBtn');
 const resultsContent = document.getElementById('resultsContent');
 const button = document.getElementById('voice');
+button.style.display="none";
 const btnHistorique = document.getElementById('historique');
-
+btnHistorique.style.display="none";
 
 let selectedFile = null;
 let inventaires = {};
@@ -98,6 +99,8 @@ function affichage(occurrences, phrase, definitions, semantic) {
     const div = document.createElement("div");
     div.className = "result-item";
     div.innerHTML = phrase + "<br><br>" + definitions;
+    button.style.display="block";
+    btnHistorique.style.display="block";
 
     resultsContent.appendChild(div);
 
