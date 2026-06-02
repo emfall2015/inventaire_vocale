@@ -3,9 +3,11 @@ const previewImage = document.getElementById('previewImage');
 const analyzeBtn = document.getElementById('analyzeBtn');
 const resultsContent = document.getElementById('resultsContent');
 const button = document.getElementById('voice');
+const btnHistorique = document.getElementById('historique');
+
 
 let selectedFile = null;
-let inventaire = [];
+let inventaires = {};
 
 // Prévisualisation de l'image
 function chargerImage(event) {
@@ -83,11 +85,12 @@ function genererDefinitions(occurrences, semantic) {
 function affichage(occurrences, phrase, definitions, semantic) {
 
     Object.entries(occurrences).forEach(([classe, nb]) => {
-        console.log(occurrences);
         const div = document.createElement("div");
         div.className = "result-item";
         div.textContent = nb + "  " + (semantic[classe]?.fr || classe) + (nb > 1 ? "s" : "");
-        inventaire.push((semantic[classe]?.fr || classe) + (nb > 1 ? "s" : ""), nb);
+
+        inventaires[(semantic[classe]?.fr || classe) + (nb > 1 ? "s" : "")] = nb;
+
         resultsContent.appendChild(div);
     });
 
@@ -106,25 +109,18 @@ function affichage(occurrences, phrase, definitions, semantic) {
             vocaliser("Aucune analyse disponible.");
         }
     });
-
-    /*  historique(
-       {
-   "date": dateDuJour(),
-   "image": "bureau.jpg",
-   "inventaire": {
-   "bottle": 1,
-   "laptop": 1,
-   "cup": 1
-   }
-   }
-   );*/
-    historique(
-        {
-            "date": dateDuJour(),
-            "image": "bureau.jpg",
-            "inventaire": inventaire
+    // Téléchargement Historique
+    btnHistorique.addEventListener('click', () => {
+        if (inventaires) {
+            historique(
+                {
+                    "date": dateDuJour(),
+                    "image": selectedFile.name,
+                    "inventaire": inventaires
+                }
+            );
         }
-    );
+    });
 }
 
 // Function detecterObjets fonction qui analyse une Image et 
@@ -153,10 +149,8 @@ async function detecterObjets() {
 
     affichage(occurrences, phrase, definitions, semantic);
 
-    console.log("Occurrences:", occurrences);
-    console.log(phrase);
-
-
+    //console.log("Occurrences:", occurrences);
+    //console.log(phrase);
 }
 
 imageInput.addEventListener('change', chargerImage);
@@ -188,11 +182,6 @@ function historique(data, fileName = "historique.json") {
     }
 }
 
-/*
- historique(
-    { nom: "Alice", age: 25, hobbies: ["lecture", "voyage"] },
-    "historique.json"
-);*/
 
 // Formatage date YYYY-MM-DD HH:MM
 function padZero(num) {
@@ -202,7 +191,8 @@ function dateDuJour() {
     const maintenant = new Date();
 
     const annee = maintenant.getFullYear();
-    const mois = padZero(maintenant.getMonth() + 1); // Mois commence à 0
+    const mois = padZero(maintenant.getMonth()+1); // maintenant.getMonth() renvoie 0 pour le premier Mois
+
     const jour = padZero(maintenant.getDate());
 
     const heures = padZero(maintenant.getHours());
@@ -217,10 +207,10 @@ function vocaliser(voice) {
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel(); // Stoppe la voix en cours si nécessaire
 
-         const voiceNettoye = voice
-        .replace(/<br\s*\/?>/gi, "\n")  // supprime les <br>, <br/> et <br />
-        .replace(/<[^>]*>/g, "")      // supprime toute autre balise HTML
-        .replace(/\./g, "");           // suppression des points
+        const voiceNettoye = voice
+            .replace(/<br\s*\/?>/gi, "\n")  // supprime les <br>, <br/> et <br />
+            .replace(/<[^>]*>/g, "")      // supprime toute autre balise HTML
+            .replace(/\./g, "");           // suppression des points
 
         const utterance = new SpeechSynthesisUtterance(voiceNettoye);
         utterance.lang = "fr-FR";
